@@ -14,7 +14,7 @@ pygame.display.set_caption('Aerospace War Simulation')
 
 # Membuat objek pesawat, target, dan display
 plane = Plane()
-target = Target(np.array([600, 300]))  # Misalnya target berada di koordinat (600, 300)
+targets = [Target(np.array([600, 300])), Target(np.array([200, 100])), Target(np.array([400, 500]))]
 display = Display(screen)
 missiles = []
 
@@ -38,9 +38,10 @@ while running:
 
     # Peluncuran rudal otomatis
     if keys[pygame.K_a]:
-        missile = Missile(plane.position.copy(), plane.velocity.copy())
-        missile.set_target(target.position)
-        missiles.append(missile)
+        if targets:
+            missile = Missile(plane.position.copy(), plane.velocity.copy())
+            missile.set_target(targets[0].position)  # Target pertama dalam daftar
+            missiles.append(missile)
 
     # Update posisi rudal
     for missile in missiles:
@@ -49,7 +50,8 @@ while running:
     # Mengupdate tampilan
     screen.fill((0, 0, 0))  # Bersihkan layar
     display.draw_plane(plane)
-    display.draw_target(target)
+    for target in targets:
+        display.draw_target(target)
     display.draw_missiles(missiles)
     display.draw_hud(plane)
 
